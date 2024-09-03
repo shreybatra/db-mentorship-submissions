@@ -57,7 +57,6 @@ def send_query_for_evaluation(query, task_num, question_name, email):
         "query": serialised_query,
         "email": email,
     }
-    print(body)
 
     response = requests.put(
         URL,
@@ -66,7 +65,6 @@ def send_query_for_evaluation(query, task_num, question_name, email):
     )
 
     if int(response.status_code / 100) != 2:
-        print(response.text)
         print(
             f"Failed to send result for evaluation. Status code: {response.status_code}."
             + "Please contact on discord."
@@ -74,7 +72,11 @@ def send_query_for_evaluation(query, task_num, question_name, email):
         sys.exit(1)
 
     data = response.json()
-    print(data)
+
+    solved = "SOLVED" if data["solved"] else "FAILED"
+    points = data["points"]
+
+    print(f"[{solved}] You received {points} for {question_name}.")
 
 
 # DO NOT UPDATE THIS CODE
